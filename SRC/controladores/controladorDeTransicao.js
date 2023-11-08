@@ -10,8 +10,8 @@ const listarTransacoes = (req, res) => {
 };
 
 const detalharTransacao = (req, res) => {
-  const { transacaoId } = req.params;
-  const transacao = transacoes.find((t) => t.id === transacaoId);
+const { transacaoId } = req.params;
+const transacao = transacoes.find((t) => t.id === transacaoId);
 
   if (!transacao) {
     return res.status(404).json({ mensagem: 'Transação não encontrada' });
@@ -21,19 +21,19 @@ const detalharTransacao = (req, res) => {
 };
 
 const cadastrarTransacao = (req, res) => {
-  const { categoriaId, descricao, valor } = req.body;
+const { categoriaId, descricao, valor } = req.body;
 
   if (!categoriaId || !descricao || !valor) {
     return res.status(400).json({ mensagem: 'Categoria, descrição e valor são obrigatórios' });
   }
 
-  const categoria = categorias.find((c) => c.id === categoriaId);
+const categoria = categorias.find((c) => c.id === categoriaId);
 
   if (!categoria) {
     return res.status(400).json({ mensagem: 'Categoria não encontrada' });
   }
 
-  const novaTransacao = {
+const novaTransacao = {
     id: String(transacoes.length + 1),
     categoriaId,
     descricao,
@@ -46,16 +46,16 @@ const cadastrarTransacao = (req, res) => {
 };
 
 const editarTransacao = (req, res) => {
-  const { transacaoId } = req.params;
-  const { categoriaId, descricao, valor } = req.body;
-  const transacao = transacoes.find((t) => t.id === transacaoId);
+const { transacaoId } = req.params;
+const { categoriaId, descricao, valor } = req.body;
+const transacao = transacoes.find((t) => t.id === transacaoId);
 
   if (!transacao) {
     return res.status(404).json({ mensagem: 'Transação não encontrada' });
   }
 
   if (categoriaId) {
-    const categoria = categorias.find((c) => c.id === categoriaId);
+  const categoria = categorias.find((c) => c.id === categoriaId);
 
     if (!categoria) {
       return res.status(400).json({ mensagem: 'Categoria não encontrada' });
@@ -76,8 +76,8 @@ const editarTransacao = (req, res) => {
 };
 
 const removerTransacao = (req, res) => {
-  const { transacaoId } = req.params;
-  const index = transacoes.findIndex((t) => t.id === transacaoId);
+const { transacaoId } = req.params;
+const index = transacoes.findIndex((t) => t.id === transacaoId);
 
   if (index === -1) {
     return res.status(404).json({ mensagem: 'Transação não encontrada' });
@@ -89,7 +89,7 @@ const removerTransacao = (req, res) => {
 };
 
 const obterExtrato = (req, res) => {
-  const { dataInicial, dataFinal, categoriaId } = req.query;
+const { dataInicial, dataFinal, categoriaId } = req.query;
 
   let extratoFiltrado = [...transacoes]; 
 
@@ -101,7 +101,7 @@ const obterExtrato = (req, res) => {
     extratoFiltrado = extratoFiltrado.filter((t) => t.categoriaId === categoriaId);
   }
 
-  const saldoTotal = extratoFiltrado.reduce((saldo, transacao) => {
+const saldoTotal = extratoFiltrado.reduce((saldo, transacao) => {
     return saldo + transacao.valor;
   }, 0);
 
@@ -109,8 +109,8 @@ const obterExtrato = (req, res) => {
 };
 
 const filtrarTransacoesPorCategoria = (req, res) => {
-  const { categoriaId } = req.params;
-  const transacoesFiltradas = transacoes.filter((t) => t.categoriaId === categoriaId);
+const { categoriaId } = req.params;
+const transacoesFiltradas = transacoes.filter((t) => t.categoriaId === categoriaId);
 
   return res.status(200).json(transacoesFiltradas);
 };
