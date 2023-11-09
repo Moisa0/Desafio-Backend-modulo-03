@@ -21,10 +21,10 @@ const transacao = transacoes.find((t) => t.id === transacaoId);
 };
 
 const cadastrarTransacao = (req, res) => {
-const { categoriaId, descricao, valor } = req.body;
+const { categoriaId, descricao, valor, data } = req.body;
 
-  if (!categoriaId || !descricao || !valor) {
-    return res.status(400).json({ mensagem: 'Categoria, descrição e valor são obrigatórios' });
+  if (!categoriaId || !descricao || !valor || !data) {
+    return res.status(400).json({ mensagem: 'Categoria, descrição, valor e data são obrigatórios' });
   }
 
 const categoria = categorias.find((c) => c.id === categoriaId);
@@ -38,6 +38,7 @@ const novaTransacao = {
     categoriaId,
     descricao,
     valor,
+    data,
   };
 
   transacoes.push(novaTransacao);
@@ -47,7 +48,7 @@ const novaTransacao = {
 
 const editarTransacao = (req, res) => {
 const { transacaoId } = req.params;
-const { categoriaId, descricao, valor } = req.body;
+const { categoriaId, descricao, valor, data } = req.body;
 const transacao = transacoes.find((t) => t.id === transacaoId);
 
   if (!transacao) {
@@ -55,7 +56,7 @@ const transacao = transacoes.find((t) => t.id === transacaoId);
   }
 
   if (categoriaId) {
-  const categoria = categorias.find((c) => c.id === categoriaId);
+const categoria = categorias.find((c) => c.id === categoriaId);
 
     if (!categoria) {
       return res.status(400).json({ mensagem: 'Categoria não encontrada' });
@@ -70,6 +71,10 @@ const transacao = transacoes.find((t) => t.id === transacaoId);
 
   if (valor) {
     transacao.valor = valor;
+  }
+
+  if (data) {
+    transacao.data = data;
   }
 
   return res.status(200).json({ mensagem: 'Transação atualizada com sucesso', transacao });
@@ -91,7 +96,7 @@ const index = transacoes.findIndex((t) => t.id === transacaoId);
 const obterExtrato = (req, res) => {
 const { dataInicial, dataFinal, categoriaId } = req.query;
 
-  let extratoFiltrado = [...transacoes]; 
+  let extratoFiltrado = [...transacoes];
 
   if (dataInicial && dataFinal) {
     extratoFiltrado = extratoFiltrado.filter((t) => t.data >= dataInicial && t.data <= dataFinal);
