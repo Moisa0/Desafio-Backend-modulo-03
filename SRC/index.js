@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
-const rotasDeUsuario = require('./rotasDeUsuario');
-const rotasDeTransicao = require('./rotasDeTransicao');
+const rotasDeUsuario = require('./rotas/rotaDeUsuario');
+const rotasDeTransicao = require('./rotas/rotaDeTransacao');
 
 app.use('/usuarios', rotasDeUsuario);
 app.use('/transicoes', rotasDeTransicao);
 
-const porta = process.env.PORT || 3000;
-app.listen(porta, () => {
-  console.log(`Servidor rodando na porta ${porta}`);
+
+app.listen(3000, () => {
+  console.log(`Servidor rodando na porta 3000`);
 });

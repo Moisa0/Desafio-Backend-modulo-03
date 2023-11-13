@@ -7,7 +7,7 @@ const { segredoJwt } = require('./config');
 const Usuario = require('./models/Usuario');
 
 const autenticarUsuario = (req, res, next) => {
-const token = req.header('Authorization');
+const token = req.headers.Authorization
 
   if (!token) {
     return res.status(401).json({ mensagem: 'Acesso não autorizado' });
@@ -33,13 +33,28 @@ const usuario = await Usuario.findOne({ where: { email } });
   }
 };
 
-const cadastrarUsuario = async (nome, email, senhaHash) => {
-  try {
-const novoUsuario = await Usuario.create({ nome, email, senha: senhaHash });
-    return novoUsuario;
-  } catch (error) {
-    throw an Error('Erro ao cadastrar usuário');
+const cadastrarUsuario = async (req, res) => {
+const {nome, email, pass}= req.body
+
+
+if (!nome || !email || !pass) {
+  return res.status(400).json({ error: 'Por favor, verifique se os campos estão preenchidos corretamente' });
+}
+
+try {
+  const emailDuplicado = await pool.query(`select * from usuarios where email = $1`, [email]);
+
+  if (emailDuplicado.rowCount > 0) {
+      return res.status(400).json({ error: 'Este email já está cadastrado. Tentei Outro' });
   }
+  const hash = await bcrypt.hash(pass, 10);
+  const query = `insert into usuarios (nome, email, pass) values ($1, $2, $3) returning *`;
+  const { rows } = await pool.query(query, [nome, email, hash]);
+  const { pass: _, ...usuario } = rows[0];
+
+  return res.status(201).json(usuario);
+} catch (error) {
+  return res.status(400).json({ error: 'Ocorreu um erro no cadastro do usuário' });}
 };
 
 router.post('/usuarios/cadastrar', async (req, res) => {

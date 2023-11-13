@@ -1,3 +1,5 @@
+create database dindin;
+
 CREATE TABLE usuarios (
     id serial PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -35,7 +37,7 @@ CREATE TABLE transacoes (
     descricao VARCHAR(255) NOT NULL,
     valor NUMERIC(10, 2) NOT NULL,
     data DATE NOT NULL,
-    categoria_id INT NOT NULL,
-    usuario_id INT NOT NULL,
+    categoria_id integer not null references categorias(id),
+    usuario_id integer not null references usuarios(id),
     tipo VARCHAR(20) NOT NULL
 );

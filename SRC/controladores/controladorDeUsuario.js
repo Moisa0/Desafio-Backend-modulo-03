@@ -1,12 +1,9 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
 
-const { Pool } = require('pg');
-const connectionString = 'sua_conexão_com_o_banco_de_dados';
-const pool = new Pool({ connectionString });
+const pool = require('../bancoDeDados/conexao')
 
 
 const autenticarUsuario = (req, res, next) => {
